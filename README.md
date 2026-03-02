@@ -1,262 +1,69 @@
-# K-ATOMS — The Atomic Unit of Knowledge
+# ⚛️ K-ATOMS — The Atomic Unit of Knowledge
 
-**Knowledge you can see. Data your agents can read.**
+**Knowledge you can see. Data your AI agents can read.**
 
-> This repository introduces a new primitive:
-> **a K-Atom — an atomic, self-contained unit of knowledge that is simultaneously human-readable and machine-executable.**
-
-K-Atoms turn files, documents, datasets and structured knowledge into **self-contained SVG/SVGZ artifacts** that:
-
-* look like images,
-* behave like databases,
-* and can be consumed directly by AI agents.
+> **K-ATOMS** introduces a new digital primitive: an atomic, self-contained unit of knowledge that is simultaneously human-readable and machine-executable. This is not just a file format; it is a **Content-Addressed Knowledge** system designed for the era of Human-AI collaboration.
 
 ---
 
-## Why this exists (short version)
+## Why this exists
 
 Knowledge today lives in two incompatible worlds:
 
-* **Human-first** → documents, markdown, PDFs
-* **Machine-first** → databases, APIs, embeddings
+* **Human-first:** Documents, PDFs, and Markdown (visual, but lossy for machines).
+* **Machine-first:** Databases, APIs, and Embeddings (structured, but invisible to humans).
 
-K-Atoms introduce a third category:
-
-> **A portable, verifiable, visual knowledge unit**
-> that humans can share *as an image*
-> and machines can consume *as structured data*.
-
-This is not compression.  
-This is not steganography.  
-This is a **new interaction primitive for human + AI systems**.
+**K-Atoms introduce a third category:** A portable, verifiable, visual knowledge unit that humans share as an image and machines consume as structured data.
 
 ---
 
-## Core idea
+## Core Idea: The Atomic Primitive
 
-A **K-Atom** is:
+A **K-Atom** is a valid **SVG/SVGZ** artifact with a Gzip-compressed payload embedded in its `<metadata>`. It is **atomic**: it cannot be partially understood, partially transferred, or partially consumed.
 
-* a **valid SVG/SVGZ image**
-* with a **gzip-compressed payload embedded in `<metadata>`**
-* containing a **mini filesystem** (text, markdown, JSON, code, datasets)
-* cryptographically identifiable and optionally signed
-* visually summarized by a **pure Sierpinski carpet glyph**
+### The Visual Glyph (Sierpinski Fingerprint)
 
-A K-Atom is **atomic**:
-it cannot be partially understood, partially transferred, or partially consumed.
+Each K-Atom contains a canonical Sierpinski carpet.
 
----
-
-## The visual glyph (why Sierpinski)
-
-Each K-Atom contains a **canonical Sierpinski carpet**:
-
-* The **structure is fixed** (pure mathematical object)
-* The **overlay is derived from `sha256(payload)`**
-
-Result:
-
-* same content → same visual fingerprint
-* different content → different glyph
-* humans get an immediate *“this is not the same K-Atom”* signal
-* machines get exact hashes and signatures
-
-This is **content-addressed knowledge — made visual**.
+* The structure is a fixed mathematical object.
+* The visual overlay is derived from `sha256(payload)`.
+* **Result:** Same content → same visual fingerprint. Different content → different glyph. Humans get an immediate "signal" of integrity; machines get exact cryptographic hashes.
 
 ---
 
-## What’s in this repo
+## What makes K-Atoms different (The non-obvious part)
 
-This repo ships a **fully client-side** reference implementation:
+### 1. Hostile Channel Resilience
 
-* **K-Atom Maker** — convert files into K-Atoms
-* **K-Atom Viewer** — load an image and recover the knowledge
+Images survive where files don’t. You can post a K-Atom on image-based platforms, send it via chat, or archive it visually. While a ZIP might be blocked or stripped, the SVG persists as a valid image.
 
-No backend.  
-No server required.
+### 2. Emergent Advantage: Size vs. Meaning
 
----
+This is not just about compression; it is about **Structure as Compression**.
 
-## Features (v0.22)
+* A **~10 KB SVGZ** K-Atom can expand to **~150 KB** of uncompressed payload.
+* This corresponds to ~60 pages of technical text or a full agent context bundle.
+* The ratio between file size and **semantic content** is radically superior to traditional formats.
 
-### Maker
+### 3. Human + AI Symmetry
 
-* Upload:
-  * `.txt`, `.md`, `.csv`, `.json`
-  * `.pdf` (text extracted via PDF.js)
-* Generate:
-  * `artifact.svg` or `artifact.svgz`
-* Automatically:
-  * builds a structured payload
-  * generates a human-readable visual cover
-  * embeds compressed data inside SVG metadata
-* Optional:
-  * **Ed25519 signature** (payload integrity + authorship)
+No more "doc vs. data" pipelines. The K-Atom is the single source of truth.
 
-### Viewer
-
-* Load a K-Atom:
-  * via **file upload** (`.svg` / `.svgz`)
-* Extract:
-  * full payload
-  * original file
-  * or a `.zip` bundle
-* Browse:
-  * tree view (`input/`, `derived/`, `README.md`, etc.)
-  * Markdown rendering
-  * CSV preview
-  * JSON pretty print
-* Verify:
-  * **cryptographic signature** (Ed25519)
+* **Humans** see the visual summary and can "read" the intent through AR or OCR.
+* **Agents** extract the structured JSON/Markdown core via the metadata layer.
 
 ---
 
-## What makes K-Atoms different (the non-obvious part)
+## Use Cases & Applications
 
-### 1. Atomic knowledge
-
-Everything needed to understand or reuse the content is **inside the K-Atom**.
-
-* No broken links
-* No missing context
-* No dependency on external storage
-
----
-
-### 2. Shareability across hostile channels
-
-Images survive where files don’t.
-
-You can:
-
-* send a K-Atom over chat
-* post it on image-based platforms
-* archive it offline
-* pin it visually
-
-Try doing that with a ZIP file.
-
----
-
-### 3. Human + AI symmetry
-
-The same K-Atom supports:
-
-* **human reading** (visual + markdown)
-* **agent ingestion** (structured payload)
-
-No duplication.  
-No separate “doc vs data” pipelines.
-
----
-
-### 4. Verifiable by design
-
-Every K-Atom can include:
-
-* `sha256(payload)`
-* Ed25519 signature
-* deterministic visual fingerprint
-
-This enables:
-
-* trust
-* provenance
-* reproducibility
-* auditability
-
----
-
-## Emergent advantage: size vs. meaning (why this scales)
-
-One non-obvious property of K-Atoms is **how much usable knowledge fits inside a small image**.
-
-Because K-Atoms use:
-- structured text (Markdown / JSON),
-- deterministic gzip compression,
-- and SVG/SVGZ as a container,
-
-the ratio between **file size** and **semantic content** is radically different from traditional formats.
-
-### A practical reference (not a benchmark)
-
-These numbers are not limits — they are *reference orders of magnitude* observed in practice.
-
-- A **~10 KB SVGZ K-Atom**
-  - can typically expand to **~50–150 KB** of uncompressed payload
-  - depending on structure, redundancy, and text entropy
-
-That means:
-
-- ~50–150 KB of **pure structured text**
-- which roughly corresponds to:
-  - **25–60 pages** of Markdown / technical text
-  - or a **small paper**
-  - or a **non-trivial dataset / mini-CRM**
-  - or a **full agent context bundle**
-
-Now extrapolate:
-
-- **100 KB SVGZ** → hundreds of KB to multiple MB of structured knowledge  
-- **300 KB SVGZ** → potentially *entire repositories*, playbooks, or research bundles  
-
-All still packaged as:
-> a single image.
-
-### Why this matters (beyond compression)
-
-This is not just about saving space.
-
-The emergent advantages are:
-
-- **Portability**
-  - images travel where ZIPs, databases and folders don’t
-- **Atomicity**
-  - one K-Atom = one complete knowledge unit
-- **Context integrity**
-  - nothing is “external” or missing
-- **Human + AI symmetry**
-  - humans see a visual summary
-  - agents extract structured data
-
-The size efficiency is just the visible side-effect  
-of treating **structure as the primary compression layer**.
-
----
-
-## Mini documentation
-
-### Create a K-Atom
-
-1. Open the app
-2. Go to **Maker**
-3. Upload a file
-4. Click **Generate artifact**
-5. Download `.svg` or `.svgz`
-
-### Recover content from a K-Atom
-
-1. Go to **Viewer**
-2. Upload the image
-3. Browse files
-4. Export original or full bundle
-5. (Optional) Verify signature
-
----
-
-## Use cases & applications: What can you build with K-Atoms?
-
-Below are **real, non-theoretical use cases**.
-
----
 
 ### 1. Scientific & technical papers as K-Atoms
 
 A single K-Atom can contain:
 
-* full paper (Markdown)
-* datasets
-* code
+* full paper (i.e. Markdown, PDF, TXT,and, etc.)
+* datasets (i.e. CSV, JSON, and, etc.)
+* code (i.e. R, M, C, Python, and, etc.)
 * metadata
 * references
 
@@ -264,7 +71,7 @@ One image = one reproducible research unit.
 
 ---
 
-### 2. ArangoDB + K-Atoms (graph + vector + image)
+### 2. K-Atoms + ArangoDB (graph + vector + image)
 
 K-Atoms integrate naturally with **GraphDBs and RAG systems**:
 
@@ -349,61 +156,70 @@ No infrastructure required once the image exists.
 
 ---
 
+### 7. Web3 & Content-Addressed Knowledge
+
+By linking the visual fingerprint to the SHA-256 hash, K-Atoms act as **physicalized hash-keys**. They are the perfect container for decentralized data, where the image itself serves as the verifiable proof of the data it carries.
+
+---
+
+### 8. Actionable Physicality (AR/Camera)
+
+Since K-Atoms are visual, they are designed to be **actionable in the real world**.
+
+* Pointing a camera at a printed K-Atom (or screen) can trigger a summary description.
+* Mobile agents can "see" the info, extract the hash, and pull the full payload, making offline knowledge instantly discoverable.
+
+---
+
+## Features (v0.22)
+
+### Maker
+
+* **Multiformat Upload:** `.txt`, `.md`, `.csv`, `.json`, and `.pdf` (text extracted via PDF.js - No needed).
+* **Deterministic Generation:** Automatic building of structured payloads and visual covers.
+* **Cryptography:** Optional **Ed25519 signature** for authorship and integrity.
+
+### Viewer
+
+* **Zero-Server Extraction:** Fully client-side recovery of the original files or `.zip` bundles.
+* **Deep Inspection:** Tree view of the internal filesystem, Markdown rendering, and JSON pretty-printing.
+* **Verification:** Real-time cryptographic signature validation.
+
+---
+
+## Implementation Details
+
+This repository ships as a **Pure JavaScript** reference implementation.
+
+* **No Backend Required.**
+* **No Node_Modules Bloat.**
+* **Zero Infrastructure.**
+
+It is designed to be lightweight enough to run in a browser, an Electron app, or as a module for an AI Agent's toolset.
+
+---
+
+## Get Started
+
+1. Clone the repo.
+2. Open `index.html` (no `npm install` needed).
+3. Drop a file and create your first Atom.
+
+---
+
 ## What K-Atoms are NOT
 
-* ❌ Not QR codes
-* ❌ Not steganography hacks
-* ❌ Not image compression tricks
-* ❌ Not “metadata in SVG”
-
-K-Atoms are a **new knowledge primitive** with:
-
-* a visual surface
-* a structured core
-* and a verifiable identity
-
----
-
-## Status
-
-* v0.23 — **spec closed**
-* Pure Sierpinski carpet glyph
-* Client-side Maker + Viewer
-* SVG/SVGZ only (by design)
-
----
-
-## If this makes you uncomfortable — good.
-
-That usually means:
-
-* you’re seeing a new primitive
-* not just a new tool
-
----
-
-## Next directions (open)
-
-* gallery mode (Pinterest-style)
-* URL loading with proxy fallback
-* publisher keys & trust chains
-* graph-native indexing
-* agent-native protocols
-
----
-
-**If you build something weird with K-Atoms, that’s the point.**
+* ❌ **Not QR codes:** They carry the actual data, not just a link.
+* ❌ **Not steganography:** We are not "hiding" data; we are using valid SVG metadata standards.
+* ❌ **Not image compression:** We are using structure to maximize semantic density.
 
 ---
 
 ## Conceptual Notice
 
-K-ATOM is introduced here as a **knowledge primitive**.
+K-ATOM is introduced as a **knowledge primitive**.
+While this repository is licensed under **Apache 2.0**, we ask that derivative works or systems building upon this concept explicitly reference **K-ATOM** as the originating primitive to preserve conceptual attribution and historical continuity.
 
-While this repository is licensed under Apache 2.0,
-the authors ask that derivative works, research, or systems
-that build upon this concept explicitly reference
-**K-ATOM** as the originating primitive.
+---
 
-This is not a legal restriction — it is a request
-to preserve conceptual attribution and historical continuity.
+**If you build something weird with K-Atoms, that’s the point.**
